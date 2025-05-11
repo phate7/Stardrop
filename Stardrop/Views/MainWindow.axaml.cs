@@ -1514,12 +1514,18 @@ namespace Stardrop.Views
                 return;
             }
 
-            if (Program.settings.NexusDetails is null || Program.settings.NexusDetails.IsPremium is false)
-            {
-                await CreateWarningWindow(Program.translation.Get("ui.warning.download_without_premium"), Program.translation.Get("internal.ok"));
-                return;
-            }
-            else if (_viewModel.Mods.Where(m => String.IsNullOrEmpty(m.InstallStatus) is false).Count() == 0)
+            //if (Program.settings.NexusDetails is null || Program.settings.NexusDetails.IsPremium is false)
+            //{
+            //    await CreateWarningWindow(Program.translation.Get("ui.warning.download_without_premium"), Program.translation.Get("internal.ok"));
+            //    return;
+            //}
+            //else if (_viewModel.Mods.Where(m => String.IsNullOrEmpty(m.InstallStatus) is false).Count() == 0)
+            //{
+            //    await CreateWarningWindow(Program.translation.Get("ui.warning.no_downloads_available"), Program.translation.Get("internal.ok"));
+            //    return;
+            //}
+
+            if (_viewModel.Mods.Where(m => String.IsNullOrEmpty(m.InstallStatus) is false).Count() == 0)
             {
                 await CreateWarningWindow(Program.translation.Get("ui.warning.no_downloads_available"), Program.translation.Get("internal.ok"));
                 return;
@@ -2146,7 +2152,10 @@ namespace Stardrop.Views
                 return null;
             }
 
-            var modDownloadLink = await Nexus.Client.GetFileDownloadLink(modId.Value, modFile.Id, serverName: EnumParser.GetDescription(Program.settings.PreferredNexusServer));
+            // Here
+            //var modDownloadLink = await Nexus.Client.GetFileDownloadLink(modId.Value, modFile.Id, serverName: EnumParser.GetDescription(Program.settings.PreferredNexusServer));
+            string nexusDownloadLink = $"https://www.nexusmods.com/stardewvalley/mods/{mod.NexusModId}?tab=files&file_id={modFile.Id.ToString()}";
+            var modDownloadLink = NexusHelper.MakeDownloadLink(nexusDownloadLink, modFile.Id.ToString());
             if (modDownloadLink is null)
             {
                 await CreateWarningWindow(String.Format(Program.translation.Get("ui.warning.failed_nexus_install"), mod.Name), Program.translation.Get("internal.ok"));

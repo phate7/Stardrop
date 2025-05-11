@@ -40,6 +40,7 @@
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="Json.More.Net" Version="2.0.1" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Projektanker.Icons.Avalonia" Version="5.13.0" />
 		<PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="5.13.0" />
 		<PackageReference Include="semver" Version="2.3.0" />
@@ -152,6 +153,13 @@
 		<ZipName Include="Stardrop-win-x64.zip" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <None Update="session.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<Target Name="FolderProfile - Windows" AfterTargets="Publish" Condition="$(Configuration)=='Release' And $(RuntimeIdentifier)=='win-x64'">
 		<Exec Command="del @(ZipName) 2&gt;nul" WorkingDirectory="$(PublishDir)" />
 
@@ -159,6 +167,7 @@
 
 		<Exec Command="@(WSL) mv Themes @(TempFolderPath)" WorkingDirectory="$(PublishDir)" />
 		<Exec Command="@(WSL) mv i18n @(TempFolderPath)" WorkingDirectory="$(PublishDir)" />
+		<Exec Command="@(WSL) mv session.txt @(TempFolderPath)" WorkingDirectory="$(PublishDir)" />
 		<Exec Command="@(WSL) mv Stardrop.exe Stardrop.pdb @(TempFolderPath)" WorkingDirectory="$(PublishDir)" />
 
 		<Exec Command="ren @(TempFolderPath) Stardrop" WorkingDirectory="$(PublishDir)" />
